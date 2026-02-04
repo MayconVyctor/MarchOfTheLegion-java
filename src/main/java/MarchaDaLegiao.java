@@ -1,3 +1,5 @@
-public static void main(String[] args) {
-    System.out.println("Hello word!");
+public class MarchaDaLegiao {
+    public static void main(String[] args) {
+        System.out.println("Hello word!");
+    }
 }
