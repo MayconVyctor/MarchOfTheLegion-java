@@ -11,8 +11,6 @@ public abstract class Tropa {
         this.simbolo = simbolo;
     }
 
-    public abstract String getRepresentacao(String tipoLista);
-
     public int getPrioridade() {
         return prioridade;
     }
@@ -43,5 +41,13 @@ public abstract class Tropa {
 
     public void setColuna(int coluna) {
         this.coluna = coluna;
+    }
+
+    public String getRepresentacao(String tipoLista) {
+        if (tipoLista.equalsIgnoreCase("n")) {
+            return String.valueOf(prioridade);
+        } else {
+            return String.valueOf(simbolo);
+        }
     }
 }
