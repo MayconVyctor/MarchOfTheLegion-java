@@ -14,7 +14,6 @@ public class InsertionSort {
             Tropa tropaAtual = tropasCopia.get(i);
             int j = i - 1;
             while (j >= 0 && tropasCopia.get(j).getPrioridade() > tropaAtual.getPrioridade()) {
-                System.out.println("Movendo: " + tropasCopia.get(j).getPrioridade() + " -> " + (j + 1));
                 tropasCopia.set(j + 1, tropasCopia.get(j));
                 j--;
             }
