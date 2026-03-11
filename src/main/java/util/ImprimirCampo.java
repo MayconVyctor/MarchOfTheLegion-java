@@ -1,92 +1,84 @@
 package util;
 
 import model.Tropa;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 public class ImprimirCampo {
 
-    private static final Random random = new Random();
-
-    public static void imprimir(List<Tropa> tropas, int tamanhoCampo, String tipoLista, String titulo, int[] unidades, String algoritmo) {
+    public static void imprimir(List<Tropa> tropas, int tamanhoCampo, String tipoLista, String titulo, int[] unidades, String algoritmo, String orientacao) {
 
         if (titulo.equals("INICIAL")) {
-            System.out.println("Algorithm=" + algoritmo);
-            System.out.println("Type=" + tipoLista);
+            System.out.println("Algoritomo = " + algoritmo);
+            System.out.println("Type = " + tipoLista);
 
             for (int i = 0; i < unidades.length; i++) {
                 System.out.print(unidades[i]);
                 if (i < unidades.length - 1) System.out.print(",");
             }
             System.out.println();
-            System.out.println("Battlefield=" + tamanhoCampo);
+            System.out.println("Battlefield = " + tamanhoCampo);
             System.out.println();
         }
 
-        System.out.println("Posicao " + titulo.toLowerCase() + ":");
+        System.out.println("Posição " + titulo.toLowerCase() + ":");
 
         String[][] campo = new String[tamanhoCampo][tamanhoCampo];
-        for (int linha = 0; linha < tamanhoCampo; linha++) {
-            for (int coluna = 0; coluna < tamanhoCampo; coluna++) {
-                campo[linha][coluna] = "*";
-            }
-        }
+        for (String[] linha : campo) Arrays.fill(linha, "*");
 
         if (titulo.equals("INICIAL")) {
-            List<Integer> posicoes = new ArrayList<>();
-            for (int i = 0; i < tamanhoCampo * tamanhoCampo; i++) {
-                posicoes.add(i);
-            }
+            distribuirAleatorio(campo, tropas, tamanhoCampo, tipoLista);
+        } else {
 
-            Collections.shuffle(posicoes, random);
+            for (Tropa t : tropas) {
+                String rep = t.getRepresentacao(tipoLista);
+                int idx = t.getIndiceLinha();
 
-            for (int i = 0; i < tropas.size(); i++) {
-                int posicao = posicoes.get(i);
-                int linha = posicao / tamanhoCampo;
-                int coluna = posicao % tamanhoCampo;
-                campo[linha][coluna] = tropas.get(i).getRepresentacao(tipoLista);
-            }
-        }
-        else {
-            for (Tropa tropa : tropas) {
-                String rep = tropa.getRepresentacao(tipoLista);
-                int linhaAlvo = -1;
-
-                if (rep.equals("1") || rep.equals("0") || rep.equalsIgnoreCase("C")) {
-                    linhaAlvo = tamanhoCampo - 1;
-                }
-                else if (rep.startsWith("1") || rep.equalsIgnoreCase("M")) {
-                    linhaAlvo = tamanhoCampo - 2;
-                }
-                else if (rep.startsWith("2") || rep.equalsIgnoreCase("T")) {
-                    linhaAlvo = tamanhoCampo - 3;
-                }
-                else if (rep.startsWith("3") || rep.equalsIgnoreCase("S")) {
-                    linhaAlvo = tamanhoCampo - 4;
-                }
-                else if (rep.startsWith("4") || rep.equalsIgnoreCase("I")) {
-                    linhaAlvo = tamanhoCampo - 5;
-                }
-
-                if (linhaAlvo >= 0 && linhaAlvo < tamanhoCampo) {
-                    for (int col = tamanhoCampo - 1; col >= 0; col--) {
-                        if (campo[linhaAlvo][col].equals("*")) {
-                            campo[linhaAlvo][col] = rep;
-                            break;
-                        }
-                    }
+                switch (orientacao.toLowerCase()) {
+                    case "s": preencher(campo, idx, -1, rep, tamanhoCampo); break;
+                    case "n": preencher(campo, (tamanhoCampo - 1) - idx, -1, rep, tamanhoCampo); break;
+                    case "e": preencher(campo, -1, idx, rep, tamanhoCampo); break;
+                    case "w": preencher(campo, -1, (tamanhoCampo - 1) - idx, rep, tamanhoCampo); break;
                 }
             }
         }
+        desenhar(campo);
+    }
 
-        for (int linha = 0; linha < tamanhoCampo; linha++) {
-            for (int coluna = 0; coluna < tamanhoCampo; coluna++) {
-                if (coluna > 0) System.out.print(" ");
-                System.out.print(campo[linha][coluna]);
+    private static void preencher(String[][] campo, int linhaAlvo, int colAlvo, String rep, int tam) {
+        if (linhaAlvo != -1) {
+            for (int c = tam - 1; c >= 0; c--) {
+                if (campo[linhaAlvo][c].equals("*")) {
+                    campo[linhaAlvo][c] = rep;
+                    return;
+                }
+            }
+        } else {
+            for (int l = tam - 1; l >= 0; l--) {
+                if (campo[l][colAlvo].equals("*")) {
+                    campo[l][colAlvo] = rep;
+                    return;
+                }
+            }
+        }
+    }
+
+    private static void distribuirAleatorio(String[][] campo, List<Tropa> tropas, int tam, String tipo) {
+        List<Integer> pos = new ArrayList<>();
+        for (int i = 0; i < tam * tam; i++) pos.add(i);
+        Collections.shuffle(pos);
+        for (int i = 0; i < tropas.size(); i++) {
+            int p = pos.get(i);
+            campo[p / tam][p % tam] = tropas.get(i).getRepresentacao(tipo);
+        }
+    }
+
+    private static void desenhar(String[][] campo) {
+        for (String[] linha : campo) {
+            for (int j = 0; j < linha.length; j++) {
+                System.out.print(linha[j] + (linha[j].length() > 1 ? " " : "  "));
             }
             System.out.println();
         }
+        System.out.println();
     }
 }

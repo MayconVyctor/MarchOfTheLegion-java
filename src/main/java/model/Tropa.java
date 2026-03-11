@@ -3,12 +3,19 @@ package model;
 public abstract class Tropa {
     protected int prioridade;
     protected char simbolo;
-    protected int linha;
-    protected int coluna;
 
     public Tropa(int prioridade, char simbolo) {
         this.prioridade = prioridade;
         this.simbolo = simbolo;
+    }
+
+    public int getIndiceLinha() {
+        if (this.prioridade == 1) return 0;
+        if (this.prioridade == 11) return 1;
+        if (this.prioridade == 21) return 2;
+        if (this.prioridade == 31) return 3;
+        if (this.prioridade == 41) return 4;
+        return 0;
     }
 
     public int getPrioridade() {
@@ -25,22 +32,6 @@ public abstract class Tropa {
 
     public void setSimbolo(char simbolo) {
         this.simbolo = simbolo;
-    }
-
-    public int getLinha() {
-        return linha;
-    }
-
-    public void setLinha(int linha) {
-        this.linha = linha;
-    }
-
-    public int getColuna() {
-        return coluna;
-    }
-
-    public void setColuna(int coluna) {
-        this.coluna = coluna;
     }
 
     public String getRepresentacao(String tipoLista) {

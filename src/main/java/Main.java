@@ -1,10 +1,11 @@
-import java.util.Collections;
 import java.util.List;
 import config.ValidarParametros;
 import config.Configuracao;
 import util.GeradorTropas;
 import util.ImprimirCampo;
 import sort.InsertionSort;
+import sort.SelectionSort;
+import sort.*;
 import model.*;
 
 public class Main {
@@ -24,18 +25,31 @@ public class Main {
                 config.getTipoLista(),
                 "INICIAL",
                 config.getUnidades(),
-                config.getAlgoritmo()
+                config.getAlgoritmo(),
+                config.getOrientacao()
         );
 
-
-        List<Tropa> ordenadas = InsertionSort.ordenar(tropas);
+        List<Tropa> ordenadas;
+        String alg = config.getAlgoritmo().toLowerCase();
+        if (alg.equals("s")) {
+            ordenadas = SelectionSort.ordenar(tropas);
+        } else if (alg.equals("b")) {
+            ordenadas = BubbleSort.ordenar(tropas);
+        } else if (alg.equals("q")) {
+            ordenadas = QuickSort.ordenar(tropas);
+        } else if (alg.equals("m")) {
+            ordenadas = MergeSort.ordenar(tropas);
+        } else {
+            ordenadas = InsertionSort.ordenar(tropas); // Padrão 'i'
+        }
         ImprimirCampo.imprimir(
                 ordenadas,
                 config.getTamanhoCampo(),
                 config.getTipoLista(),
                 "FINAL",
                 config.getUnidades(),
-                config.getAlgoritmo()
+                config.getAlgoritmo(),
+                config.getOrientacao()
         );
     }
 }
