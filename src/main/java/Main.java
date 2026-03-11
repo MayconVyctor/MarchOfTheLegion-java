@@ -40,7 +40,7 @@ public class Main {
         } else if (alg.equals("m")) {
             ordenadas = MergeSort.ordenar(tropas);
         } else {
-            ordenadas = InsertionSort.ordenar(tropas); // Padrão 'i'
+            ordenadas = InsertionSort.ordenar(tropas);
         }
         ImprimirCampo.imprimir(
                 ordenadas,
